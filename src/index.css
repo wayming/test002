@@ -4,9 +4,9 @@ body {
   font-family: sans-serif;
 }
 
-.button {
+button {
     background-color: #4CAF50; /* Green */
-    border: none;
+    border: s;
     color: white;
     padding: 15px 32px;
     text-align: center;
