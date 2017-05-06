@@ -8,22 +8,20 @@ import { connect } from 'react-redux';
 class App extends Component {
 
   generateSVG() {
-    console.log(this.props.circles)
-    return
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 841.9 595.3">
-            <circle cx="420.9" cy="296.5" r="45.7"/>
-            <rect x="360" y="100" width="100" height="100"/>
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 841.9 595.3">
             {
               this.props.circles.map(node => {
-                <circle cx={node.cx} cy={node.cy}/>;                
+                return <circle key={node.cx} cx={node.cx} cy={node.cy} r={node.r} fill={node.fill}/>             
               })
             }
             {
               this.props.rects.map(node => {
-                <circle x={node.x} y={node.y}/>;                
-              })              
+                return <rect key={node.x} x={node.x} y={node.y} height={node.h} width={node.w} fill={node.fill}/>             
+              })
             }
-        </svg>;
+      </svg>
+    )
   }
 
   render() {
@@ -37,7 +35,7 @@ class App extends Component {
         </button>
         <button onClick={() => this.props.addRect()}>
         </button>
-  {this.generateSVG()}
+        {this.generateSVG()}
         </div>
     );
   }
