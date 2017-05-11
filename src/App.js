@@ -27,15 +27,16 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
         <button onClick={() => this.props.addCircle()}>
         </button>
         <button onClick={() => this.props.addRect()}>
         </button>
-        {this.generateSVG()}
+        <div id="workarea" style={{overflow: "scroll"}}> 
+        <div id="svgcanvas" style={{position: 'relative', width: '1000px', height: '600px'}}>
+          {this.generateSVG()}
+        </div>
+        </div>
+
         </div>
     );
   }
