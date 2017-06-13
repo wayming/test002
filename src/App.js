@@ -8,6 +8,10 @@ import { connect } from 'react-redux';
 
 class App extends Component {
 
+  constructor() {
+    super();
+  }
+
   generateSVG() {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 841.9 595.3">
@@ -25,23 +29,33 @@ class App extends Component {
     )
   }
 
+  mousedown(d, i) {
+    var saveCoord = this.props.saveCoord;
+    return function(d, i) {
+      var coord = d3.mouse(this);
+      console.log("[" + coord[0] + "," + coord[1] + "]");
+      saveCoord(coord[0], coord[1]);
+    }
+  }
+
+  mouseup(d, i) {
+    var lastCoord = this.props.lastCoord;
+    console.log(this.props.lastCoord.x);
+    var addRect = this.props.addRect;
+    return function(d, i) {
+      var coord = d3.mouse(this);
+      console.log(lastCoord);
+
+      console.log("[" + lastCoord.x + "," + lastCoord.y + "]");
+      console.log("[" + coord[0] + "," + coord[1] + "]");
+      addRect(lastCoord.x, lastCoord.y, Math.abs(lastCoord.x - coord[0]), Math.abs(lastCoord.y - coord[1])); 
+    }
+  }
+
   componentDidMount() {
     var workarea = d3.select("#workarea");
-    workarea.on("mousedown", mousedown);
-    workarea.on("mouseup", mouseup);
-
-    function mousedown(d, i) {
-      var coord = d3.mouse(this);
-      console.log("[" + coord[0] + "," + coord[1] + "]");
-      this.props.saveCoord(...coord);
-    }
-
-    function mouseup(d, i) {
-      var coord = d3.mouse(this);
-      var lastCoord = this.props.lastCoord;
-      console.log("[" + coord[0] + "," + coord[1] + "]");
-      this.props.addRectAction(lastCoord.x, lastCoord.y, abs(lastCoord.x - coord[0]), abs(lastCoord.y - coord[1])); 
-    }
+    workarea.on("mousedown", this.mousedown());
+    workarea.on("mouseup", this.mouseup());
   }
 
   render() {
@@ -52,12 +66,11 @@ class App extends Component {
         <button onClick={() => this.props.addRect()}>
         </button>
         <div id="workarea" style={{overflow: "scroll"}}> 
-        <div id="svgcanvas" style={{position: 'relative', width: '1000px', height: '600px'}}>
-          {this.generateSVG()}
+          <div id="svgcanvas" style={{position: 'relative', width: '1000px', height: '600px'}}>
+            {this.generateSVG()}
+          </div>
         </div>
-        </div>
-
-        </div>
+      </div>
     );
   }
 }
