@@ -29,33 +29,32 @@ class App extends Component {
     )
   }
 
-  mousedown(d, i) {
+  mousedown() {
     var saveCoord = this.props.saveCoord;
-    return function(d, i) {
+    return function (d, i) {
+      console.log(this);
       var coord = d3.mouse(this);
       console.log("[" + coord[0] + "," + coord[1] + "]");
       saveCoord(coord[0], coord[1]);
     }
   }
 
-  mouseup(d, i) {
-    var lastCoord = this.props.lastCoord;
-    console.log(this.props.lastCoord.x);
-    var addRect = this.props.addRect;
-    return function(d, i) {
+  mouseup() {
+    var drawRect = this.props.drawRect;
+    var that = this;
+    return function (d, i) {
+      var last = that.props.lastCoord;
       var coord = d3.mouse(this);
-      console.log(lastCoord);
-
-      console.log("[" + lastCoord.x + "," + lastCoord.y + "]");
+      console.log("[" + last.x + "," + last.y + "]");
       console.log("[" + coord[0] + "," + coord[1] + "]");
-      addRect(lastCoord.x, lastCoord.y, Math.abs(lastCoord.x - coord[0]), Math.abs(lastCoord.y - coord[1])); 
+      drawRect(last.x, last.y, Math.abs(last.y - coord[1]), Math.abs(last.x - coord[0])); 
     }
   }
 
   componentDidMount() {
-    var workarea = d3.select("#workarea");
-    workarea.on("mousedown", this.mousedown());
-    workarea.on("mouseup", this.mouseup());
+    this.workarea = d3.select("#workarea");
+    this.workarea.on("mousedown", this.mousedown());
+    this.workarea.on("mouseup", this.mouseup());
   }
 
   render() {
@@ -90,6 +89,9 @@ function mapDispatchToProps(dispatch) {
     },
     addRect: () => {
       dispatch(addRectAction());  
+    },
+    drawRect: (x,y,h,w) => {
+      dispatch(addRectAction(x,y,h,w));
     },
     saveCoord: (x, y) => {
       dispatch(saveCoord(x, y));
